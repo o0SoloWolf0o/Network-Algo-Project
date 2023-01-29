@@ -1,0 +1,52 @@
+version: '3.5'
+
+services:
+  node1:
+    image: debian:latest
+    container_name: node1
+    hostname: node1
+    networks:
+      default:
+        ipv4_address: 192.168.1.5
+    volumes:
+      - ./data:/data
+    tty: true
+
+  node2:
+    image: python:latest
+    container_name: node2
+    hostname: node2
+    networks:
+      default:
+        ipv4_address: 192.168.1.6
+    volumes:
+      - ./data:/data
+    tty: true
+  
+  node3:
+    image: debian:latest
+    container_name: node3
+    hostname: node3
+    networks:
+      default:
+        ipv4_address: 192.168.1.7
+    volumes:
+      - ./data:/data
+    tty: true
+
+  node4:
+    image: python:latest
+    container_name: node4
+    hostname: node4
+    networks:
+      default:
+        ipv4_address: 192.168.1.8
+    volumes:
+      - ./data:/data
+    tty: true
+
+networks:
+  default:
+    name: connect-tsp
+    external: true
+
