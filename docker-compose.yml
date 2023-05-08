@@ -1,52 +1,51 @@
-version: '3.5'
-
+version: '3'
 services:
   node1:
-    image: debian:latest
+    build: .
     container_name: node1
-    hostname: node1
+    command: java MyApp client 1
+    depends_on:
+      - server
     networks:
-      default:
-        ipv4_address: 192.168.1.5
-    volumes:
-      - ./data:/data
-    tty: true
-
+      myapp:
+        ipv4_address: 172.16.238.10
   node2:
-    image: python:latest
+    build: .
     container_name: node2
-    hostname: node2
+    command: java MyApp server 2
+    depends_on:
+      - server
     networks:
-      default:
-        ipv4_address: 192.168.1.6
-    volumes:
-      - ./data:/data
-    tty: true
-  
+      myapp:
+        ipv4_address: 172.16.238.11
   node3:
-    image: debian:latest
+    build: .
     container_name: node3
-    hostname: node3
+    command: java MyApp server 3
+    depends_on:
+      - server
     networks:
-      default:
-        ipv4_address: 192.168.1.7
-    volumes:
-      - ./data:/data
-    tty: true
-
+      myapp:
+        ipv4_address: 172.16.238.12
   node4:
-    image: python:latest
+    build: .
     container_name: node4
-    hostname: node4
+    command: java MyApp server 4
+    depends_on:
+      - server
     networks:
-      default:
-        ipv4_address: 192.168.1.8
-    volumes:
-      - ./data:/data
-    tty: true
-
+      myapp:
+        ipv4_address: 172.16.238.13
+  server:
+    build: .
+    container_name: server
+    command: java MyApp server 1
+    networks:
+      myapp:
+        ipv4_address: 172.16.238.9
 networks:
-  default:
-    name: connect-tsp
-    external: true
-
+  myapp:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.238.0/24

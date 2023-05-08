@@ -1,8 +1,9 @@
-FROM python:slim-bullseye
+FROM openjdk:8-jdk-alpine
 
-COPY . /app
 WORKDIR /app
 
-RUN pip install -r requirements.txt
+COPY MyApp.java .
 
-CMD ["python", "main.py"]
+RUN javac MyApp.java
+
+CMD ["java", "MyApp", "server", "1"]
