@@ -1,51 +1,30 @@
 version: '3'
 services:
-  node1:
-    build: .
-    container_name: node1
-    command: java MyApp client 1
-    depends_on:
-      - server
-    networks:
-      myapp:
-        ipv4_address: 172.16.238.10
-  node2:
-    build: .
-    container_name: node2
-    command: java MyApp server 2
-    depends_on:
-      - server
-    networks:
-      myapp:
-        ipv4_address: 172.16.238.11
-  node3:
-    build: .
-    container_name: node3
-    command: java MyApp server 3
-    depends_on:
-      - server
-    networks:
-      myapp:
-        ipv4_address: 172.16.238.12
-  node4:
-    build: .
-    container_name: node4
-    command: java MyApp server 4
-    depends_on:
-      - server
-    networks:
-      myapp:
-        ipv4_address: 172.16.238.13
-  server:
-    build: .
-    container_name: server
-    command: java MyApp server 1
-    networks:
-      myapp:
-        ipv4_address: 172.16.238.9
-networks:
-  myapp:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.16.238.0/24
+  city1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5001:5001'
+    command: bash -c "sleep 2 && java TSPParallelBFS && ip addr show eth0 | grep 'inet '"
+  city2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5002:5002'
+    command: bash -c "sleep 2 && java TSPParallelBFS && ip addr show eth0 | grep 'inet '"
+  city3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5003:5003'
+    command: bash -c "sleep 2 && java TSPParallelBFS && ip addr show eth0 | grep 'inet '"
+  city4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5004:5004'
+    command: bash -c "sleep 2 && java TSPParallelBFS && ip addr show eth0 | grep 'inet '"

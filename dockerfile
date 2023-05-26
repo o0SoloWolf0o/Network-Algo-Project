@@ -1,9 +1,8 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:11
 
+COPY . /app
 WORKDIR /app
 
-COPY MyApp.java .
+RUN javac TSPParallelBFS.java
 
-RUN javac MyApp.java
-
-CMD ["java", "MyApp", "server", "1"]
+CMD ["java", "TSPParallelBFS"]
