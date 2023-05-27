@@ -1,0 +1,62 @@
+FROM openjdk:11
+COPY . /app
+WORKDIR /app
+RUN javac Main.java
+CMD ["java", "Main"]
+
+
+version: '3'
+services:
+  node1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      tsp-network:
+        ipv4_address: 172.20.0.2
+    depends_on:
+      - node4
+    command: >
+      sh -c "sleep 5 && java Main 1"
+
+  node2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      tsp-network:
+        ipv4_address: 172.20.0.3
+    depends_on:
+      - node1
+    command: >
+      sh -c "sleep 10 && java Main 2"
+
+  node3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      tsp-network:
+        ipv4_address: 172.20.0.4
+    depends_on:
+      - node2
+    command: >
+      sh -c "sleep 15 && java Main 3"
+
+  node4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      tsp-network:
+        ipv4_address: 172.20.0.5
+    depends_on:
+      - node3
+    command: >
+      sh -c "sleep 20 && java Main 4"
+
+networks:
+  tsp-network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
