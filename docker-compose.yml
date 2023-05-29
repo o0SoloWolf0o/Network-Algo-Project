@@ -1,30 +1,38 @@
 version: '3'
 services:
-  city1:
+  node1:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '5001:5001'
-    command: bash -c "sleep 2 && java TSPParallelBFS && ip addr show eth0 | grep 'inet '"
-  city2:
+      - "5001:5001"
+    networks:
+      - tsp-network
+  node2:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '5002:5002'
-    command: bash -c "sleep 2 && java TSPParallelBFS && ip addr show eth0 | grep 'inet '"
-  city3:
+      - "5002:5001"
+    networks:
+      - tsp-network
+  node3:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '5003:5003'
-    command: bash -c "sleep 2 && java TSPParallelBFS && ip addr show eth0 | grep 'inet '"
-  city4:
+      - "5003:5001"
+    networks:
+      - tsp-network
+  node4:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '5004:5004'
-    command: bash -c "sleep 2 && java TSPParallelBFS && ip addr show eth0 | grep 'inet '"
+      - "5004:5001"
+    networks:
+      - tsp-network
+
+networks:
+  tsp-network:
+    driver: bridge
