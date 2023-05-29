@@ -13,10 +13,19 @@ public class Main {
     public static void main(String[] args) {
         List<Node> nodes = new ArrayList<>();
         ReentrantLock lock = new ReentrantLock();
-
+    
+        // Add a 2D array to represent distances between cities
+        int[][] distances = {
+            {0, 100, 15, 20},
+            {100, 0, 35, 25},
+            {150, 35, 0, 30},
+            {200, 25, 30, 0}
+        };
+    
         for (int i = 0; i < NUM_CITIES; i++) {
             int port = PORTS[i];
-            Node node = new Node(i + 1, port, lock);
+            // Update this line to pass the distances to the Node constructor
+            Node node = new Node(i + 1, port, lock, distances[i]);
             nodes.add(node);
             node.start();
         }
@@ -41,14 +50,16 @@ public class Main {
         private boolean isSent;
         private List<String> receivedMessages;
         private ReentrantLock lock;
+        private final int[] distances;
 
-        public Node(int city, int port, ReentrantLock lock) {
+        public Node(int city, int port, ReentrantLock lock, int[] distances) {
             this.city = city;
             this.port = port;
             this.lock = lock;
             this.neighbors = new ArrayList<>();
             this.receivedMessages = new ArrayList<>();
             this.isSent = false;
+            this.distances = distances;
             for (int i = 0; i < NUM_CITIES; i++) {
                 if (i + 1 != city) {
                     this.neighbors.add("node " + (i + 1));
@@ -112,12 +123,13 @@ public class Main {
         }
 
         public void calculateDistances() {
-            int distance = city;
+            int totalDistance = 0;
             for (String receivedCity : receivedMessages) {
-                distance += Integer.parseInt(receivedCity);
+                int cityIndex = Integer.parseInt(receivedCity) - 1;
+                totalDistance += distances[cityIndex];
             }
-            System.out.println(String.format("[Neighbors] Node %d has neighbors: %s", city, neighbors));
-            System.out.println(String.format("[Total Distance] Total distance for node %d: %d\n", city, distance));
-        }
+        System.out.println(String.format("[Neighbors] Node %d has neighbors: %s", city, neighbors));
+        System.out.println(String.format("[Total Distance] Total distance for node %d: %d\n", city, totalDistance));
+    }
     }
 }
